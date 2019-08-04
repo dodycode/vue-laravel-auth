@@ -2,7 +2,7 @@
 Authentication App that use vuejs as a frontend framework and Laravel as a backend RESTFUL API. This project made for practice purposes.
 
 ### Materials
-* [Laravel][https://laravel.com]
+* [Laravel](https://laravel.com)
 * [Vue JS](https://vuejs.org/)
 * [VueX](https://vuex.vuejs.org/)
 * [Vue Router](https://router.vuejs.org/) 
