@@ -33,11 +33,11 @@ class RegisterController extends Controller
     		return response()->json([
     			'data' => $data,
     			'meta' => [
-    				'token' => $registeredUser->api_token
+    				'api_token' => $registeredUser->api_token
     			]
     		], 201);
     	}else{
-    		return response()->json(['message' => 'Whoops something were wrong!'], 500);
+    		return response()->json(['errors' => 'Whoops something were wrong!'], 500);
     	}
     }
 }

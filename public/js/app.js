@@ -2118,7 +2118,22 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     register: function register() {
-      alert('Work In Progress! (ENDPOINT utk regist blum ada...)');
+      var _this = this;
+
+      var name = this.name;
+      var email = this.email;
+      var password = this.password;
+      var password_confirmation = this.password_confirmation;
+      this.$store.dispatch('register', {
+        name: name,
+        email: email,
+        password: password,
+        password_confirmation: password_confirmation
+      }).then(function () {
+        return _this.$router.push('/');
+      })["catch"](function (err) {
+        return console.error(err);
+      });
     }
   }
 });
@@ -3720,7 +3735,7 @@ var render = function() {
                   }
                 ],
                 staticClass:
-                  "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline",
+                  "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
                 attrs: {
                   id: "password",
                   type: "password",
@@ -20278,6 +20293,29 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     }
   },
   actions: {
+    register: function register(context, newUser) {
+      return new Promise(function (resolve, reject) {
+        context.commit('authRequestMutation');
+        axios({
+          url: "".concat(BASE_URL, "/register"),
+          data: newUser,
+          method: 'POST'
+        }).then(function (res) {
+          var token = res.data.meta.api_token;
+          localStorage.setItem('token', token);
+          axios.defaults.headers.common['Authorization'] = token;
+          context.commit('authSuccessMutation', token);
+          resolve(res); //promise ended and success
+        })["catch"](function (err) {
+          // console.log(err.response.data.errors);
+          var errors = err.response.data.errors;
+          context.commit('authErrorMutation');
+          localStorage.removeItem('token');
+          reject(errors[Object.keys(errors)[0]]);
+          alert(errors[Object.keys(errors)[0]]);
+        });
+      });
+    },
     login: function login(context, user) {
       return new Promise(function (resolve, reject) {
         context.commit('authRequestMutation');
@@ -20286,7 +20324,6 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
           data: user,
           method: 'POST'
         }).then(function (res) {
-          // console.log(res);
           var token = res.data.meta.api_token;
           localStorage.setItem('token', token);
           axios.defaults.headers.common['Authorization'] = token;
@@ -20295,8 +20332,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
         })["catch"](function (err) {
           context.commit('authErrorMutation');
           localStorage.removeItem('token');
-          reject(err.response.data.errors); //promise ended but error
-
+          reject(err.response.data.errors);
           alert(err.response.data.errors);
         });
       });

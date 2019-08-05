@@ -30,6 +30,33 @@ export const store = new Vuex.Store({
 		}
 	},
 	actions: {
+		register: (context, newUser) => {
+			return new Promise((resolve, reject) => {
+				context.commit('authRequestMutation');
+				axios({
+					url: `${BASE_URL}/register`,
+					data: newUser,
+					method: 'POST'
+				}).then(res => {
+					const token = res.data.meta.api_token;
+
+					localStorage.setItem('token', token);
+					axios.defaults.headers.common['Authorization'] = token;
+
+					context.commit('authSuccessMutation', token);
+					resolve(res); //promise ended and success
+				}).catch(err => {
+					// console.log(err.response.data.errors);
+
+					let errors = err.response.data.errors;
+					
+					context.commit('authErrorMutation');
+					localStorage.removeItem('token');
+					reject(errors[Object.keys(errors)[0]]);
+					alert(errors[Object.keys(errors)[0]]);
+				})
+			});
+		},
 		login: (context, user) => {
 			return new Promise((resolve, reject) => {
 				context.commit('authRequestMutation');
@@ -38,8 +65,6 @@ export const store = new Vuex.Store({
 					data: user,
 					method: 'POST'
 				}).then(res => {
-					// console.log(res);
-
 					const token = res.data.meta.api_token;
 
 					localStorage.setItem('token', token);
@@ -50,7 +75,7 @@ export const store = new Vuex.Store({
 				}).catch(err => {
 					context.commit('authErrorMutation');
 					localStorage.removeItem('token');
-					reject(err.response.data.errors); //promise ended but error
+					reject(err.response.data.errors);
 					alert(err.response.data.errors);
 				});
 			});
