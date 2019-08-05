@@ -20295,9 +20295,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
         })["catch"](function (err) {
           context.commit('authErrorMutation');
           localStorage.removeItem('token');
-          reject(err); //promise ended but error
+          reject(err.response.data.errors); //promise ended but error
 
-          alert('Sorry, your credentials doesnt match our records');
+          alert(err.response.data.errors);
         });
       });
     },

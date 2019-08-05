@@ -50,8 +50,8 @@ export const store = new Vuex.Store({
 				}).catch(err => {
 					context.commit('authErrorMutation');
 					localStorage.removeItem('token');
-					reject(err); //promise ended but error
-					alert('Sorry, your credentials doesnt match our records');
+					reject(err.response.data.errors); //promise ended but error
+					alert(err.response.data.errors);
 				});
 			});
 		},

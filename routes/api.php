@@ -18,3 +18,4 @@ Route::resource('users', 'Api\UserController')->only([
 ])->middleware('auth:api');
 
 Route::post('login', 'Api\Auth\LoginController@login');
+Route::post('register', 'Api\Auth\RegisterController@register');
