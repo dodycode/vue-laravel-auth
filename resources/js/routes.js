@@ -1,8 +1,8 @@
 import {store} from './store/store';
-import Register from './pages/Register.vue';
-import Login from './pages/Login.vue';
-import NotFound from './pages/NotFound.vue';
-import Dashboard from './pages/Dashboard.vue';
+const Register = () => import('./pages/Register.vue');
+const Login = () => import('./pages/Login.vue');
+const NotFound = () => import('./pages/NotFound.vue');
+const Dashboard = () => import('./pages/Dashboard.vue');
 
 //jika sama sekali blum login 
 const ifNotAuth = function(to, from, next){
